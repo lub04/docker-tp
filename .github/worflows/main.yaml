@@ -2,8 +2,7 @@ name: CI/CD Pipeline
 
 on:
     push:
-        branches:
-            - main
+        branches: [main]
 
 jobs:
     test:
@@ -46,3 +45,11 @@ jobs:
 
             - name: Build
               run: docker build -t gettting-started ./app
+
+    deploy:
+        needs: build
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Trigger Render.com deployment
+              run: curl "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
